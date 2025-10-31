@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import io
 import base64
+import re
 
 # Persistent State 
 if "profile_text" not in st.session_state:
@@ -99,11 +100,18 @@ if uploaded_image:
             # Wrap text nicely
             max_width = 45
             if st.session_state["profile_text"]:
-                wrapped_profile = textwrap.fill(st.session_state["profile_text"][:700], width=max_width)
+                def strip_markdown(text):
+                    # remove **bold**, *italic*, and inline code/backticks
+                    text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
+                    text = re.sub(r"\*(.*?)\*", r"\1", text)
+                    text = re.sub(r"`(.*?)`", r"\1", text)
+                    return text
+
+                clean_text = strip_markdown(st.session_state["profile_text"])
+                wrapped_profile = textwrap.fill(clean_text[:700], width=max_width)
             else:
                 st.warning("Please generate a profile first before creating a card.")
                 st.stop()
-            # wrapped_profile = textwrap.fill(profile_text[:700], width=max_width)
 
             # Draw text on overlay
             margin = 40
