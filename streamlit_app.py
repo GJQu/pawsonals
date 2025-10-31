@@ -5,6 +5,9 @@ import textwrap
 import io
 import base64
 
+# Persistent State 
+if "profile_text" not in st.session_state:
+    st.session_state["profile_text"] = ""
 # --- SETUP ---
 st.set_page_config(page_title="Pawsonals 🐾", page_icon="🐶")
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -66,9 +69,10 @@ if uploaded_image:
                     ]
                 )
 
-                profile_text = response.choices[0].message.content
+                st.session_state["profile_text"] = response.choices[0].message.content
                 st.subheader("💘 Pet Dating Profile")
-                st.markdown(profile_text)
+                st.markdown(st.session_state["profile_text"])
+
 
     # --- CARD GENERATION ---
     if st.button("📸 Create Shareable Card"):
@@ -94,7 +98,12 @@ if uploaded_image:
 
             # Wrap text nicely
             max_width = 45
-            wrapped_profile = textwrap.fill(profile_text[:700], width=max_width)
+            if st.session_state["profile_text"]:
+                wrapped_profile = textwrap.fill(st.session_state["profile_text"][:700], width=max_width)
+            else:
+                st.warning("Please generate a profile first before creating a card.")
+                st.stop()
+            # wrapped_profile = textwrap.fill(profile_text[:700], width=max_width)
 
             # Draw text on overlay
             margin = 40
