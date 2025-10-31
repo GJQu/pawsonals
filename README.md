@@ -11,7 +11,7 @@
 
 ## 🌟 Demo
 
-👉 **[Try Pawsonals on Streamlit Cloud](https://share.streamlit.io/)** *(Replace this with your deployed app link)*
+👉 **[Try Pawsonals on Streamlit Cloud](https://pawsonals-gavin.streamlit.app/)**
 
 ![Demo Screenshot](assets/demo_screenshot.png)
 *(Add your own screenshot to `/assets/demo_screenshot.png`)*
