@@ -22,43 +22,51 @@ if uploaded_image:
     pet_breed = st.text_input("What breed (or best guess)?")
     vibe = st.selectbox("Pick their vibe:", ["Chill", "Chaotic", "Cuddly", "Diva", "Adventurous"])
 
-    if st.button("Generate Profile ✨"):
-        if not pet_name:
-            st.warning("Please enter your pet’s name.")
-        else:
-            with st.spinner("Sniffing personality..."):
-                image_bytes = uploaded_image.read()
+import base64
 
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    temperature=1.0,
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "You're a witty and warm pet dating profile writer. Keep it playful and concise."
-                        },
-                        {
-                            "role": "user",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": (
-                                        f"This is {pet_name}, a {vibe.lower()} {pet_breed or 'pet'}.\n"
-                                        "Write a short dating profile including:\n"
-                                        "1. A one-sentence summary of personality.\n"
-                                        "2. Three randomized playful Hinge-style prompts, each under 20 words.\n"
-                                        "3. A fun fact about the breed or personality type.\n"
-                                        "Keep it humorous and charming."
-                                    )
-                                },
-                                {"type": "image", "image": image_bytes}
-                            ]
-                        }
-                    ]
-                )
+if st.button("Generate Profile ✨"):
+    if not pet_name:
+        st.warning("Please enter your pet’s name.")
+    else:
+        with st.spinner("Sniffing personality..."):
+            # Read and encode the image
+            image_bytes = uploaded_image.read()
+            image_b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-                profile_text = response.choices[0].message.content
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                temperature=1.0,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You're a witty and warm pet dating profile writer. Keep it playful and concise."
+                    },
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": (
+                                    f"This is {pet_name}, a {vibe.lower()} {pet_breed or 'pet'}.\n"
+                                    "Write a short dating profile including:\n"
+                                    "1. A one-sentence summary of personality.\n"
+                                    "2. Three randomized playful Hinge-style prompts, each under 20 words.\n"
+                                    "3. A fun fact about the breed or personality type.\n"
+                                    "Keep it humorous and charming."
+                                )
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/jpeg;base64,{image_b64}"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            )
 
+            profile_text = response.choices[0].message.content
             st.subheader("💘 Pet Dating Profile")
             st.markdown(profile_text)
 
