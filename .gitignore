@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE / OS clutter
+.vscode/
+.idea/
+*.log
+
+# Jupyter / temporary files
+*.ipynb_checkpoints/
+*.swp
+*.swo
