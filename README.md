@@ -78,7 +78,9 @@ venv\Scripts\activate         # Windows
 pip install -r requirements.txt
 ```
 ### 5️⃣ Run locally
+```bash
 streamlit run streamlit_app.py
+```
 
 ## 📸 Example Output
 
