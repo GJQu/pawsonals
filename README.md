@@ -14,7 +14,6 @@
 👉 **[Try Pawsonals on Streamlit Cloud](https://pawsonals-gavin.streamlit.app/)**
 
 ![Demo Screenshot](assets/demo_screenshot.png)
-*(Add screenshot to `/assets/demo_screenshot.png`)*
 
 ---
 
